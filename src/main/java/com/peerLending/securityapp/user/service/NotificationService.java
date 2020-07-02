@@ -1,6 +1,7 @@
 package com.peerLending.securityapp.user.service;
 
 import com.google.gson.Gson;
+import com.peerLending.securityapp.user.dto.UserDTO;
 import com.peerLending.securityapp.user.model.User;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,8 @@ public class NotificationService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendMessage(User user) {
-        rabbitTemplate.convertAndSend("userRegisteredTopic", "user.registered", GSON.toJson(user));
+    public void sendMessage(UserDTO userDTO) {
+        userDTO.setPassword(null);
+        rabbitTemplate.convertAndSend("userRegisteredTopic", "user.registered", GSON.toJson(userDTO));
     }
 }
